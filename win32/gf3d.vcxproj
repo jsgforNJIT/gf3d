@@ -191,6 +191,10 @@
     <ClInclude Include="..\include\gf3d_vgraphics.h" />
     <ClInclude Include="..\include\gf3d_vqueues.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\shaders\sprite.frag" />
+    <None Include="..\shaders\sprite.vert" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
