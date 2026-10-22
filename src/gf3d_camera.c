@@ -1,0 +1,269 @@
+#ifndef __GF3D_CAMERA_H__
+#define __GF3D_CAMERA_H__
+
+#include "gfc_matrix.h"
+
+typedef struct
+{
+    GFC_Matrix4     cameraMat;          //final matrix to become the view matrix
+    GFC_Matrix4     cameraMatInv;       //final matrix to become the inverse view matrix
+    GFC_Vector3D    scale;              //for building camera matrix
+    GFC_Vector3D    position;           //for building camera matrix
+    GFC_Vector3D    rotation;           //pitch, roll, yaw for building camera matrix
+    float           moveStep;           //when using gf3d_camera_controls_update, this is how much the camera will move per frame
+    float           rotateStep;         //when using gf3d_camera_controls_update, this is how much the camera will move per frame
+    int             autoPan;            //if true, the amount gf3d_camera_controls_update will pan the camera around
+    int             freeLook;           //if true, the amount gf3d_camera_controls_update will check user input for movement
+    Uint8           cameraTargetLock;   //if true, the gf3d_camera_controls_update keeps the camera pointed towards the target
+    GFC_Vector3D    lookTargetPosition; //the generic camera target to look at
+    GFC_Vector3D    forward;            //unit vector pointing in the forward direction relative to the camera
+    GFC_Vector3D    right;              //unit vector pointing in the right direction relative to the camera
+    GFC_Vector3D    up;                 //unit vector pointing in the up direction relative to the camera
+}Camera;
+static Camera _camera = { 0 };
+
+/**
+ * @brief take the position,scale, and rotation to calculate the view matrix
+ * @note: Do not use if you are tailoring the camera matrix by hand
+ */
+void gf3d_camera_update_view() {
+    gfc_matrix4_view(_camera.cameraMat, _camera.position, _camera.lookTargetPosition, _camera.up);
+    gfc_matrix4_scale(_camera.cameraMat, _camera.cameraMat, _camera.scale);
+}
+
+/**
+ * @brief get the current camera view
+ * @param view output, the matrix provided will be populated with the current camera information
+ */
+void gf3d_camera_get_view_mat4(GFC_Matrix4* view) {
+    view = _camera.cameraMat;
+}
+
+/**
+ * @brief set the current camera based on the matrix provided
+ */
+void gf3d_camera_set_view_mat4(GFC_Matrix4 *view);
+
+void gf3d_camera_look_at(GFC_Vector3D target, const GFC_Vector3D* position) {
+    if (position) {
+        _camera.position = *position;
+    }
+    _camera.lookTargetPosition = target;
+}
+
+/**
+ * @brief make sure the camera is a set distance away from the view target.
+ * @note lookTargetPosition must have been set by gf3d_camera_look_at or gf3d_camera_set_look_target previously
+ * @param set the set distance to be at
+ */
+void gf3d_camera_set_distance_to_target(float set);
+
+/**
+ * @brief set the movement step for camera movement with gf3d_camera_controls_update
+ * @param step how much to move per update
+ */
+void gf3d_camera_set_move_step(float step);
+
+/**
+ * @brief set the rotation step for camera movement with gf3d_camera_controls_update
+ * @param step how much to move per update
+ */
+void gf3d_camera_set_rotate_step(float step);
+
+/**
+ * @brief move the camera "FORWARD" relative to the view angles of the camera
+ * @param magnitude how much to move
+ */
+void gf3d_camera_fly_forward(float magnitude);
+
+/**
+ * @brief move the camera "RIGHT" relative to the view angles of the camera
+ * @param magnitude how much to move
+ */
+void gf3d_camera_fly_right(float magnitude);
+
+/**
+ * @brief move the camera "UP" relative to the view angles of the camera
+ * @param magnitude how much to move
+ */
+void gf3d_camera_fly_up(float magnitude);
+
+/**
+ * @brief move the camera forward relative to the camera view angle
+ * @note does not move along the z axis
+ * @param magnitude how far to move
+ */
+void gf3d_camera_walk_forward(float magnitude);
+
+/**
+ * @brief move the camera right relative to the camera view angle
+ * @note does not move along the z axis
+ * @param magnitude how far to move
+ */
+void gf3d_camera_walk_right(float magnitude);
+
+/**
+ * @brief move the camera up along the z axis.
+ * @note does not consider view angles.
+ * @param magnitude how far to move
+ */
+void gf3d_camera_move_up(float magnitude);
+
+/**
+ * @brief rotate the camera's yaw
+ * @param magnitude how far, in radians, to rotate
+ */
+void gf3d_camera_yaw(float magnitude);
+
+/**
+ * @brief rotate the camera's pitch
+ * @param magnitude how far, in radians, to rotate
+ */
+void gf3d_camera_pitch(float magnitude);
+
+/**
+ * @brief rotate the camera's roll
+ * @param magnitude how far, in radians, to rotate
+ */
+void gf3d_camera_roll(float magnitude);
+
+/**
+ * @brief move the camera "FORWARD" relative to the view angles of the camera
+ * @param magnitude how much to move
+ */
+void gf3d_camera_fly_forward(float magnitude);
+
+/**
+ * @brief move the camera "RIGHT" relative to the view angles of the camera
+ * @param magnitude how much to move
+ */
+void gf3d_camera_fly_right(float magnitude);
+
+/**
+ * @brief move the camera "UP" relative to the view angles of the camera
+ * @param magnitude how much to move
+ */
+void gf3d_camera_fly_up(float magnitude);
+
+/**
+ * @brief move the camera forward relative to the camera view angle
+ * @note does not move along the z axis
+ * @param magnitude how far to move
+ */
+void gf3d_camera_walk_forward(float magnitude);
+
+/**
+ * @brief move the camera right relative to the camera view angle
+ * @note does not move along the z axis
+ * @param magnitude how far to move
+ */
+void gf3d_camera_walk_right(float magnitude);
+
+/**
+ * @brief move the camera up along the z axis.
+ * @note does not consider view angles.
+ * @param magnitude how far to move
+ */
+void gf3d_camera_move_up(float magnitude);
+
+//Make sure cut down by 2pi eventually
+void gf3d_camera_pitch(float magnitude) {
+    _camera.rotation.x += magnitude;
+    gfc_angle_clamp_radians(&_camera.rotation.x);
+}
+
+void gf3d_camera_roll(float magnitude) {
+    _camera.rotation.y += magnitude;
+    gfc_angle_clamp_radians(&_camera.rotation.y);
+}
+
+void gf3d_camera_yaw(float magnitude) {
+    _camera.rotation.z += magnitude;
+    gfc_angle_clamp_radians(&_camera.rotation.z);
+}
+
+GFC_Vector3D gf3d_camera_get_position() {
+    return _camera.position;
+}
+
+/**
+ * @brief get the direction the camera is looking in
+ * @return a zero vector on error, or the unit vector looking forward
+ */
+GFC_Vector3D gf3d_camera_get_direction();
+
+/**
+ * @brief get the direction right to what the camera is looking in
+ * @return a zero vector on error, or the unit vector looking forward
+ */
+GFC_Vector3D gf3d_camera_get_right();
+
+/**
+ * @brief get the direction up from wht the camera is looking in
+ * @return a zero vector on error, or the unit vector looking forward
+ */
+GFC_Vector3D gf3d_camera_get_up();
+
+
+void gf3d_camera_set_position(GFC_Vector3D position) {
+    _camera.position = position;
+}
+
+void gf3d_camera_set_scale(GFC_Vector3D scale) {
+    _camera.scale = scale;
+}
+
+void gf3d_camera_set_rotation(GFC_Vector3D rotation) {
+    _camera.rotation = rotation;
+}
+
+GFC_Vector3D gf3d_camera_get_angles() {
+    return _camera.rotation;
+}
+
+/**
+ * @brief get the gfc_vectors for forward, right, and up based on the camera view angles
+ * @param forward   [output] if provided, it will be set with the normal gfc_vector in the direction the camera is looking
+ * @param right     [output] if provided, it will be set with the normal gfc_vector to the right of where the camera is looking
+ * @param up        [output] if provided, it will be set with the normal gfc_vector directly up from where the camera is looking
+ */
+void gf3d_camera_get_view_vectors(GFC_Vector3D *forward, GFC_Vector3D *right, GFC_Vector3D *up);
+
+/**
+ * @brief update the camera based on keyboard controls, autopan, and look target
+ */
+void gf3d_camera_controls_update();
+
+/**
+ * @brief set a look target for the camera to point at
+ * @param target the position to target
+ * @note it may still need to be enabled and you will need to call gf3d_camera_controls_update
+ */
+void gf3d_camera_set_look_target(GFC_Vector3D target) {
+    _camera.lookTargetPosition = target;
+}
+
+GFC_Vector3D gf3d_camera_get_look_target() {
+    return _camera.lookTargetPosition;
+}
+
+void gf3d_camera_toggle_free_look() {
+    _camera.freeLook = !_camera.freeLook;
+}
+
+void gf3d_camera_enable_free_look(Uint8 enable) {
+    _camera.freeLook = enable;
+}
+
+void gf3d_camera_set_auto_pan(Bool enable) {
+    _camera.freeLook = enable;
+}
+
+Bool gf3d_camera_free_look_enabled() {
+    if (_camera.freeLook != 0) {
+        return true;
+    }
+    return false;
+}
+
+#endif

@@ -19,6 +19,7 @@
 #include "gf3d_vgraphics.h"
 #include "gf3d_pipeline.h"
 #include "gf3d_swapchain.h"
+#include "gf3d_model.h"
 
 extern int __DEBUG;
 
@@ -38,7 +39,8 @@ void exitGame()
 int main(int argc,char *argv[])
 {
     //local variables
-    Sprite *bg;
+    //Sprite *bg;
+    Model *dino;
     //initializtion    
     parse_arguments(argc,argv);
     init_logger("gf3d.log",0);
@@ -56,6 +58,7 @@ int main(int argc,char *argv[])
     srand(SDL_GetTicks());
     slog_sync();
     //bg = gf2d_sprite_load_image("images/bg_flat.png");
+    dino = model_load("models/dino.model");
     gf2d_mouse_load("actors/mouse.actor");
     // main game loop    
     while(!_done)
@@ -67,6 +70,8 @@ int main(int argc,char *argv[])
         gf3d_vgraphics_render_start();
                 //2D draws
                 //gf2d_sprite_draw_image(bg,gfc_vector2d(0,0));
+                //3D renders
+                gf3d_model_queue_render(dino);
                 gf2d_font_draw_line_tag("ALT+F4 to exit",FT_H1,GFC_COLOR_WHITE, gfc_vector2d(10,10));
                 gf2d_mouse_draw();
         gf3d_vgraphics_render_end();
@@ -75,7 +80,7 @@ int main(int argc,char *argv[])
     }    
     vkDeviceWaitIdle(gf3d_vgraphics_get_default_logical_device());    
     //cleanup
-    slog("gf3d program end");
+    slog("gf3d program end");// This is the output file
     exit(0);
     slog_sync();
     return 0;
