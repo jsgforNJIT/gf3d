@@ -141,7 +141,7 @@ Model* model_load(const char* filename) {
         slog("model_load: Texture failed to load for file: %s", filename);
         tempModel->texture = gf3d_texture_load("images/default.png");
     }
-    slog("model_load: Texture loaded: %s", sj_object_get_string(modelInfo, "texture")); // For debug
+    slog("model_load: Texture loaded: %s", tempModel->texture->filename); // For debug
 
     sj_free(jsonFile);
 
@@ -202,6 +202,7 @@ ModelUBO model_get_ubo(GFC_Matrix4 modelMat, GFC_Color colormod) {
     ModelUBO tempModelUBO = { 0 };
 
     tempModelUBO.color = gfc_color_to_vector4(colormod);
+    //slog("ubo color %f %f %f %f", tempModelUBO.color.x, tempModelUBO.color.y, tempModelUBO.color.z, tempModelUBO.color.w);
     gfc_matrix4_copy(tempModelUBO.model, modelMat); // World space
     gf3d_vgraphics_get_view(&tempModelUBO.view); // Puts it into camera space
     gf3d_vgraphics_get_projection_matrix(&tempModelUBO.proj); // Makes things smaller based on distance

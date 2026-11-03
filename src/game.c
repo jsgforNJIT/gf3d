@@ -82,7 +82,7 @@ int main(int argc,char *argv[])
         //slog("game.c: good before matrix view"); // For debug
                 gfc_matrix4_view(*gf3d_vgraphics_get_view_matrix(), gfc_vector3d(0, -30, 0), gfc_vector3d(0, 0, 0), gfc_vector3d(0,0, 1)); //Camera Stuff
                 //slog("game.c: good before model_queue render"); // For debug
-                gf3d_model_queue_render(dino, dinoMat, GFC_COLOR_BLUE);
+                gf3d_model_queue_render(dino, dinoMat, GFC_COLOR_GREEN); // Changes the entire model to be GFC_COLOR
                 //slog("game.c: good after model_queue render"); // For debug
                 gf2d_font_draw_line_tag("ALT+F4 to exit",FT_H1,GFC_COLOR_WHITE, gfc_vector2d(10,10));
                 gf2d_mouse_draw();
