@@ -13,6 +13,7 @@ layout(location = 0) out vec4 outColor;
 void main()
 {
     vec4 texColor = texture(texSampler, inUV);
-    outColor = texColor * inColorMod;
+    //outColor = texColor * inColorMod;
+    outColor = vec4(1,1,1,1);
     //gl_FragDepth = drawOrder;
 }

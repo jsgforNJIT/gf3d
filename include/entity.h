@@ -17,6 +17,7 @@ typedef struct {
 	GFC_Matrix4		mat;
 	GFC_Vector3D	velocity;
 	GFC_Color		colorMod;
+	GFC_Box			bounds;
 }Entity;
 
 

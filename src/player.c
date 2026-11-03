@@ -22,6 +22,7 @@
 //	self->velocity = player_think;
 //	self->free = player_free;
 //	self->data = gfc_allocate_array(sizeof(PlayerEntityData), 1);
+//  self->bounds = gfc_vector3d(10, 10, 10);
 //	return self;
 //}
 //

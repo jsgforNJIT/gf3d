@@ -31,7 +31,7 @@ Model* model_load(const char* filename);
 
 Pipeline* model_get_pipeline();
 
-void gf3d_model_queue_render(Model* model);
+void gf3d_model_queue_render(Model* model, GFC_Matrix4 modelMat, GFC_Color colormod);
 
 ModelUBO model_get_ubo(GFC_Matrix4 modelMat, GFC_Color colormod);
 

@@ -28,6 +28,7 @@
 #include "gf3d_commands.h"
 #include "gf3d_texture.h"
 #include "gf2d_sprite.h"
+#include "gf3d_model.h"
 
 #include "gf3d_vgraphics.h"
 
@@ -200,6 +201,8 @@ void gf3d_vgraphics_init(const char *config)
 
     gf3d_vgraphics.enable_2d = 1;
     gf2d_sprite_manager_init(1024);
+    model_init_system(1024);
+    gf3d_mesh_init(1024);
     renderPipe = gf2d_sprite_get_pipeline();
 
     gf3d_swapchain_create_depth_image();

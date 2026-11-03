@@ -113,4 +113,20 @@
 //	}
 //}
 //
+//int entity_collision_other(Entity *self, Entity *other){
+//	GFC_Box a, b;
+//	if ((!self)||(!other)) return 0;
+//	
+//	a = self->bounds;
+//	b = other->bounds;
+//	
+//	a = a + self->position;
+//	b = b + other->position;
+// 
+//	smth in primitives to detect if a and b are colliding, if so then return 1;
+//	
+// 
+//	return 0;
+// }
+//
 ///*eol@eof*/
