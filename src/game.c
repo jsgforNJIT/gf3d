@@ -22,6 +22,9 @@
 #include "gf3d_model.h"
 #include "gf3d_camera.h"
 
+#include "entity.h"
+#include "player.h"
+
 extern int __DEBUG;
 
 static int _done = 0;
@@ -61,9 +64,11 @@ int main(int argc,char *argv[])
     //bg = gf2d_sprite_load_image("images/bg_flat.png");
     // vgraphics has the model init;
     slog("pre-loading the dino..."); //For debug
-    dino = model_load("models/dino.model");
-    GFC_Matrix4 dinoMat = { 0};
-    gfc_matrix4_identity(dinoMat);
+    //dino = model_load("models/dino.model");
+    Entity *player;
+    player = player_spawn(gfc_vector3d(0, 0, 0));
+    //GFC_Matrix4 dinoMat = { 0};
+    //gfc_matrix4_identity(dinoMat);
     slog("dino loaded"); //For debug
     if (!dino) slog("There is no dino to print"); //For debug
 
@@ -74,15 +79,20 @@ int main(int argc,char *argv[])
         gfc_input_update();
         gf2d_mouse_update();
         gf2d_font_update();
+
+        entity_system_think();
+        entity_system_update();
+
         //camera updaes
         gf3d_vgraphics_render_start();
                 //2D draws
                 //gf2d_sprite_draw_image(bg,gfc_vector2d(0,0));
                 //3D renders
         //slog("game.c: good before matrix view"); // For debug
-                gfc_matrix4_view(*gf3d_vgraphics_get_view_matrix(), gfc_vector3d(0, -30, 0), gfc_vector3d(0, 0, 0), gfc_vector3d(0,0, 1)); //Camera Stuff
+                gfc_matrix4_view(*gf3d_vgraphics_get_view_matrix(), gfc_vector3d(15, -30, 10), gfc_vector3d(0, 0, 0), gfc_vector3d(0,0, 1)); //Camera Stuff
                 //slog("game.c: good before model_queue render"); // For debug
-                gf3d_model_queue_render(dino, dinoMat, GFC_COLOR_GREEN); // Changes the entire model to be GFC_COLOR
+                //gf3d_model_queue_render(dino, dinoMat, GFC_COLOR_GREEN); // Changes the entire model to be GFC_COLOR
+                entity_system_draw();
                 //slog("game.c: good after model_queue render"); // For debug
                 gf2d_font_draw_line_tag("ALT+F4 to exit",FT_H1,GFC_COLOR_WHITE, gfc_vector2d(10,10));
                 gf2d_mouse_draw();

@@ -8,24 +8,29 @@
 #include "gfc_text.h"
 #include "gf3d_model.h"
 
-typedef struct {
+typedef struct EntityS{ //EntityS so that Entity can refer to itself
 	Uint8			_inuse;
 	Model*			model;
 	GFC_Vector3D	position;
 	GFC_Vector3D	rotation;
 	GFC_Vector3D	scale;
-	GFC_Matrix4		mat;
+	GFC_Matrix4		mat; // model matrix
 	GFC_Vector3D	velocity;
 	GFC_Color		colorMod;
-	GFC_Box			bounds;
-}Entity;
+	GFC_Box			bounds; // hitboxes and stuff like that, found in meshPrimitives from the file // Don't forget to set bounds in mesh
+	void*			data; // Has data in it dependant on class 
 
+	int	(*draw)(struct EntityS* self); // These stuff are so that anything using entity can call these instead of this entity version.
+	int	(*free)(struct EntityS* self);
+	int	(*think)(struct EntityS* self);
+	int	(*update)(struct EntityS* self);
+}Entity;
 
 /*
 * @brief initialize the entity manager and pre-allocate a bunch
 * @param maxEnts how many entities can exist at any single moment
 */
-void entity_init(Uint32 maxEnts);
+void entity_system_init(Uint32 maxEnts);
 
 /*
 * @brief get  ablank entity from the system

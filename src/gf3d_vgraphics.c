@@ -30,8 +30,9 @@
 #include "gf2d_sprite.h"
 #include "gf3d_model.h"
 
-#include "gf3d_vgraphics.h"
+#include "entity.h"
 
+#include "gf3d_vgraphics.h"
 
 typedef struct
 {
@@ -204,6 +205,8 @@ void gf3d_vgraphics_init(const char *config)
     model_init_system(1024);
     gf3d_mesh_init(1024);
     renderPipe = gf2d_sprite_get_pipeline();
+    entity_system_init(512);
+
 
     gf3d_swapchain_create_depth_image();
     gf3d_swapchain_setup_frame_buffers(renderPipe);

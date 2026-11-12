@@ -169,7 +169,7 @@ void gf3d_model_queue_render(Model* model, GFC_Matrix4 modelMat, GFC_Color color
     ModelUBO modelUBO = model_get_ubo(modelMat, colormod);
 
     if (!model) {
-        //slog("gf3d_model_queue_render: model doesn't exist"); //For debug
+        slog("gf3d_model_queue_render: model doesn't exist"); //For debug
         return;
     }
     else {

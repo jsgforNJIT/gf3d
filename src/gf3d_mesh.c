@@ -227,6 +227,7 @@ Mesh* gf3d_mesh_load_obj(const char* filename) { // Compare to gf2d_sprite_load_
         return NULL;
     }
 
+    tempMesh->bounds = objFromFile->bounds; // x, y, z are parts of the same point; w, h, d make it a box
 
     gfc_list_append(tempMesh->primitives, tempMeshPrim);
     tempMesh->_refCount = 0;
@@ -305,7 +306,7 @@ void gf3d_mesh_queue_render(Mesh* mesh, Pipeline* pipe, void* uboData, Texture* 
         return;
     }
 
-    slog("gf3d_mesh_queue_render: texture name: %s", texture->filename);
+    //slog("gf3d_mesh_queue_render: texture name: %s", texture->filename);
     //slog("gf3d_mesh_queue_render: total number of primitives: %i", gfc_list_count(mesh->primitives)); // For debug
 
     //Do for each primitive of the mesh
