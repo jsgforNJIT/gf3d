@@ -1,9 +1,10 @@
 {
     "Version": "1.1",
     "Data": {
-        "Source": "c:\\users\\jonga\\git stuff\\gf3d\\include\\entity.h",
+        "Source": "c:\\users\\jonga\\git stuff\\gf3d\\src\\obstacle.c",
         "ProvidedModule": "",
         "Includes": [
+            "c:\\users\\jonga\\git stuff\\gf3d\\include\\obstacle.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\gfc\\simple_json\\include\\simple_json.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\gfc\\simple_json\\include\\simple_json_list.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\gfc\\simple_json\\include\\simple_json_string.h",
@@ -201,6 +202,7 @@
             "c:\\program files\\microsoft visual studio\\18\\community\\vc\\tools\\msvc\\14.29.30133\\include\\vcruntime_string.h",
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\corecrt_wstring.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\gfc\\include\\gfc_color.h",
+            "c:\\users\\jonga\\git stuff\\gf3d\\include\\entity.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_model.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_mesh.h",
             "c:\\program files (x86)\\windows kits\\10\\include\\10.0.26100.0\\ucrt\\stdalign.h",
@@ -222,9 +224,8 @@
             "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_uniform_buffers.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_texture.h",
             "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_vgraphics.h",
-            "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_commands.h"
-        ],
-        "ImportedModules": [],
-        "ImportedHeaderUnits": []
+            "c:\\users\\jonga\\git stuff\\gf3d\\include\\gf3d_commands.h",
+            "c:\\users\\jonga\\git stuff\\gf3d\\gfc\\simple_logger\\include\\simple_logger.h"
+        ]
     }
 }

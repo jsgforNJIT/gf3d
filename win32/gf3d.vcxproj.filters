@@ -183,6 +183,9 @@
     <ClCompile Include="..\src\gf2d_actor.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\obstacle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\player.h">
@@ -357,6 +360,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\gfc\simple_logger\include\simple_logger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="obstacle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

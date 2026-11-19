@@ -7,6 +7,7 @@
 #include "gfc_matrix.h"
 #include "gfc_text.h"
 #include "gf3d_model.h"
+#include "gfc_list.h"
 
 typedef struct EntityS{ //EntityS so that Entity can refer to itself
 	Uint8			_inuse;
@@ -19,12 +20,20 @@ typedef struct EntityS{ //EntityS so that Entity can refer to itself
 	GFC_Color		colorMod;
 	GFC_Box			bounds; // hitboxes and stuff like that, found in meshPrimitives from the file // Don't forget to set bounds in mesh
 	void*			data; // Has data in it dependant on class 
+	char*			category; // Is it a player, interactable, projectile, etc.
+	int				selfInd; // Index within entity manager
+	GFC_List*		collWith; // Currently unused, doing hard-coding for now // list of strings to collide with
 
-	int	(*draw)(struct EntityS* self); // These stuff are so that anything using entity can call these instead of this entity version.
+	int (*draw)(struct EntityS* self); // These stuff are so that anything using entity can call these instead of this entity version.
 	int	(*free)(struct EntityS* self);
 	int	(*think)(struct EntityS* self);
 	int	(*update)(struct EntityS* self);
 }Entity;
+
+typedef struct {
+	Entity* entityList;
+	Uint32			maxEnts;
+}EntityManager;
 
 /*
 * @brief initialize the entity manager and pre-allocate a bunch
@@ -57,5 +66,17 @@ void entity_system_think();
 * @brief queue renders on all active entities
 */
 void entity_system_draw();
+
+/*
+* @brief return whether or not these two entities are colliding
+* @param self one of the entities that may be colliding
+* @param other the other entities that may be colliding
+*/
+int entity_collision_other(Entity* self, Entity* other);
+
+/*
+* @brief allows the returning of the entity manager
+*/
+EntityManager* entity_system_get();
 
 #endif

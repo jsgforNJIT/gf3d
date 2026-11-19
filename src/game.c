@@ -24,6 +24,7 @@
 
 #include "entity.h"
 #include "player.h"
+#include "obstacle.h"
 
 extern int __DEBUG;
 
@@ -62,13 +63,32 @@ int main(int argc,char *argv[])
     srand(SDL_GetTicks());
     slog_sync();
     //bg = gf2d_sprite_load_image("images/bg_flat.png");
-    // vgraphics has the model init;
+    // vgraphics has the model init
     slog("pre-loading the dino..."); //For debug
-    //dino = model_load("models/dino.model");
+    
+    // For the entity
+
     Entity *player;
     player = player_spawn(gfc_vector3d(0, 0, 0));
-    //GFC_Matrix4 dinoMat = { 0};
-    //gfc_matrix4_identity(dinoMat);
+    GFC_String* playerPos = gfc_string_new();
+
+    Entity* wallDino1;
+    Entity* wallDino2;
+    Entity* wallDino3;
+    Entity* wallDino4;
+    wallDino1 = wall_spawn(gfc_vector3d(-150, 0, 0), gfc_vector3d(200, 200, 200));
+    wallDino2 = wall_spawn(gfc_vector3d(0, 150, 0), gfc_vector3d(200, 200, 200));
+    wallDino3 = wall_spawn(gfc_vector3d(150, 0, 0), gfc_vector3d(200, 200, 200));
+    wallDino4 = wall_spawn(gfc_vector3d(0, -150, 0), gfc_vector3d(200, 200, 200));
+
+    Entity* collDino;
+    collDino = wall_spawn(gfc_vector3d(0, 30, 0), gfc_vector3d(10, 10, 10));
+
+    // For the dinosaur model
+
+    dino = model_load("models/dino.model");
+    GFC_Matrix4 dinoMat = { 0};
+    gfc_matrix4_identity(dinoMat);
     slog("dino loaded"); //For debug
     if (!dino) slog("There is no dino to print"); //For debug
 
@@ -89,12 +109,17 @@ int main(int argc,char *argv[])
                 //gf2d_sprite_draw_image(bg,gfc_vector2d(0,0));
                 //3D renders
         //slog("game.c: good before matrix view"); // For debug
-                gfc_matrix4_view(*gf3d_vgraphics_get_view_matrix(), gfc_vector3d(15, -30, 10), gfc_vector3d(0, 0, 0), gfc_vector3d(0,0, 1)); //Camera Stuff
+                //gfc_matrix4_view(*gf3d_vgraphics_get_view_matrix(), gfc_vector3d(15, -30, 10), gfc_vector3d(0, 0, 0), gfc_vector3d(0,0, 1)); //Camera Stuff
                 //slog("game.c: good before model_queue render"); // For debug
-                //gf3d_model_queue_render(dino, dinoMat, GFC_COLOR_GREEN); // Changes the entire model to be GFC_COLOR
+                gf3d_model_queue_render(dino, dinoMat, GFC_COLOR_GREEN); // Changes the entire model to be GFC_COLOR
                 entity_system_draw();
                 //slog("game.c: good after model_queue render"); // For debug
+                
+                // HUD
                 gf2d_font_draw_line_tag("ALT+F4 to exit",FT_H1,GFC_COLOR_WHITE, gfc_vector2d(10,10));
+
+                playerPos = gfc_stringf("Position: %f, %f, %f", player->position.x, player->position.y, player->position.z);
+                gf2d_font_draw_line_tag(playerPos->buffer,FT_H1, GFC_COLOR_CYAN, gfc_vector2d(10, 50));
                 gf2d_mouse_draw();
         gf3d_vgraphics_render_end();
         if (gfc_input_command_down("exit"))_done = 1; // exit condition

@@ -1,12 +1,6 @@
 #include "simple_logger.h"
 #include "entity.h"
 
-typedef struct {
-	Entity*			entityList;
-	Uint32			maxEnts;
-	//Other Stuff Here
-}EntityManager;
-
 static EntityManager entity_manager = { 0 };
 
 // Forward declarations
@@ -20,6 +14,7 @@ void entity_think(Entity* ent);
 void entity_system_think();
 void entity_draw(Entity* ent);
 void entity_system_draw();
+int entity_collision_other(Entity* self, Entity* other);
 
 void entity_close() {
 	for (int i = 0; i < entity_manager.maxEnts; i++) {
@@ -53,6 +48,7 @@ Entity* entity_new() {
 		entity_manager.entityList[i]._inuse = 1;
 		entity_manager.entityList[i].scale = gfc_vector3d(1, 1, 1);
 		entity_manager.entityList[i].colorMod = GFC_COLOR_WHITE;
+		entity_manager.entityList[i].selfInd = i;
 		return &entity_manager.entityList[i];
 	}
 	return NULL;
@@ -98,6 +94,7 @@ void entity_think(Entity* ent) {
 	if (ent->think) {
 		if (ent->think(ent)) return;
 	}
+	//slog("entity_think: default think used");
 }
 
 void entity_system_think() {
@@ -127,7 +124,7 @@ void entity_draw(Entity* ent) {
 	//	slog("entity_draw: mat exists");
 	//}
 	//slog("For pos, rot, and scale:");
-	slog("entity_draw: Pos: %f, %f, %f", ent->position.x, ent->position.y, ent->position.z);
+	//slog("entity_draw: Pos: %f, %f, %f", ent->position.x, ent->position.y, ent->position.z);
 	//slog("Rot: %f, %f, %f", ent->rotation.x, ent->rotation.y, ent->rotation.z);
 	//slog("Scale: %f, %f, %f", ent->scale.x, ent->scale.y, ent->scale.z);
 
@@ -144,21 +141,27 @@ void entity_system_draw() {
 	}
 }
 
-//int entity_collision_other(Entity *self, Entity *other){
-//	GFC_Box a, b;
-//	if ((!self)||(!other)) return 0;
-//	
-//	a = self->bounds;
-//	b = other->bounds;
-//	
-//	a.x = self->position.x;
-//	b = b + other->position;
-// 
-//	//smth in primitives to detect if a and b are colliding, if so then return 1;
-//	// Check if self meets b.position < a.position < b.position + w, h, and d for all 3 axises
-//	
-// 
-//	return 0;
-// }
+int entity_collision_other(Entity *self, Entity *other){
+	GFC_Box a, b; // These will be bounds + position
+	if ((!self)||(!other)) return 0;
+	
+	a = self->bounds;
+	b = other->bounds;
+	
+	gfc_vector3d_add(a, a, self->position);
+	gfc_vector3d_add(b, b, other->position);
+	
+	//smth in primitives to detect if a and b are colliding, if so then return 1;
+	// Check if self meets b.position < a.position < b.position + w, h, and d for all 3 axises
+	if ((a.x + a.w <= b.x) || (b.x + b.w <= a.x)) return false;
+	if ((a.y + a.h <= b.y) || (b.y + b.h <= a.y)) return false;
+	if ((a.z + a.d <= b.z) || (b.z + b.d <= a.z)) return false;
+ 
+	return true;
+ }
+
+EntityManager* entity_system_get() {
+	return &entity_manager;
+}
 
 /*eol@eof*/
